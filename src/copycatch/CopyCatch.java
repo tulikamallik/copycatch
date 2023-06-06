@@ -1,4 +1,5 @@
 package copycatch;
+import java.awt.PageAttributes.MediaType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,16 +17,39 @@ public class CopyCatch {
 				System.out.println("Enter the keyword");
 				keyword=sc.next();
 				System.out.println("The keyword you have entered is"+keyword);
-				URL url = new URL("https://www.byrdie.com/what-is-eye-primer");
-					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				    conn.setRequestMethod("GET");
-				    try(BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream())))
-				     {
-					for(String line; (line= reader.readLine()) !=null; ) {
-						result.concat(line);
-					    System.out.println(result);
-				}
-				     }
+				 String apiUrl = "https://jsonplaceholder.typicode.com/"+keyword;
+
+			        try {
+			            // Create URL object
+			            URL url = new URL(apiUrl);
+
+			            // Open connection
+			            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+			            // Set request method
+			            connection.setRequestMethod("GET");
+
+			            // Get response code
+			            int responseCode = connection.getResponseCode();
+			            System.out.println("Response Code: " + responseCode);
+
+			            // Read response
+			            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			            String line;
+			            StringBuilder response = new StringBuilder();
+			            while ((line = reader.readLine()) != null) {
+			                response.append(line);
+			            }
+			            reader.close();
+
+			            // Print response
+			            System.out.println("Response: " + response.toString());
+
+			            // Close connection
+			            connection.disconnect();
+			        } catch (IOException e) {
+			            e.printStackTrace();
+			        }
 				    
 	}
 
